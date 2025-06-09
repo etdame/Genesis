@@ -1,0 +1,50 @@
+{
+  "factors": [
+    {
+      "id": "network_protection",
+      "description": "VPN or Tor use vs. direct ISP connection",
+      "weight": 0.18
+    },
+    {
+      "id": "email_practices",
+      "description": "Use of unique, privacy-focused email vs. single/shared account",
+      "weight": 0.13
+    },
+    {
+      "id": "password_hygiene",
+      "description": "Password manager & unique passwords vs. reuse",
+      "weight": 0.13
+    },
+    {
+      "id": "browser_metadata_hygiene",
+      "description": "Tracker-blocking/hardened browser + privacy DNS/search vs. default",
+      "weight": 0.13
+    },
+    {
+      "id": "open_source_usage",
+      "description": "Open-source privacy apps vs. proprietary",
+      "weight": 0.12
+    },
+    {
+      "id": "self_hosted_vpn",
+      "description": "Self-hosted VPN/proxy vs. commercial provider",
+      "weight": 0.08,
+      "conditional_on": "network_protection"
+    },
+    {
+      "id": "os_telemetry",
+      "description": "Privacy-respecting OS (Linux) vs. telemetry-heavy OS",
+      "weight": 0.08
+    },
+    {
+      "id": "two_factor_authentication",
+      "description": "2FA on all critical accounts vs. none",
+      "weight": 0.08
+    },
+    {
+      "id": "encryption_at_rest",
+      "description": "Full-disk encryption enabled vs. none",
+      "weight": 0.05
+    }
+  ]
+}
