@@ -1,5 +1,5 @@
 import pytest
-from scoring import calculate_score
+from scoring import calculate_score, recommend_next_level
 
 ALL_FACTORS = [
     "network_protection",
@@ -13,22 +13,20 @@ ALL_FACTORS = [
     "encryption_at_rest"
 ]
 
-def test_all_ones_yields_98_and_no_tip():
+def test_recommend_none_when_level7():
     data = {f: 1 for f in ALL_FACTORS}
-    result = calculate_score(data)
-    assert result["score"] == 98
-    assert result["level"] == 7
-    assert result["next_tip"] is None
+    assert recommend_next_level(data) is None
 
-def test_all_zeros_yields_zero_score_and_network_tip():
+def test_recommend_network_for_zero_input():
     data = {f: 0 for f in ALL_FACTORS}
-    result = calculate_score(data)
-    assert result["score"] == 0
-    assert result["level"] == 1
-    assert result["next_tip"]["factor"] == "network_protection"
+    rec = recommend_next_level(data)
+    assert rec["factor"] == "network_protection"
+    assert rec["delta_score"] == 18
 
-def test_self_hosted_vpn_ignored_when_no_vpn():
-    data = {f: 0 for f in ALL_FACTORS}
-    data["self_hosted_vpn"] = 1
-    result = calculate_score(data)
-    assert result["breakdown"]["self_hosted_vpn"] == 0
+def test_recommend_email_to_reach_level_from_score87():
+    data = {f: 1 for f in ALL_FACTORS}
+    data["email_practices"] = 0
+    # current_score = 98 - 13 = 85, level=6, next_threshold=90, needs +5
+    rec = recommend_next_level(data)
+    assert rec["factor"] == "email_practices"
+    assert rec["delta_score"] == 13

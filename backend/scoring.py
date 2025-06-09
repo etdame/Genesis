@@ -45,3 +45,42 @@ def calculate_score(input_data):
         "breakdown": breakdown,
         "next_tip": next_tip
     }
+
+def recommend_next_level(input_data):
+    result = calculate_score(input_data)
+    current_score = result["score"]
+    current_level = result["level"]
+    if current_level == 7:
+        return None
+    thresholds = [15,30,45,60,75,90]
+    next_threshold = thresholds[current_level-1]
+    total_current = sum(result["breakdown"].values())
+    candidates = []
+    for f in factors:
+        fid = f["id"]
+        val = input_data.get(fid, 0)
+        if f.get("conditional_on") and not input_data.get(f["conditional_on"], 0):
+            continue
+        if val >= 1:
+            continue
+        new_total = total_current + f["weight"] * (1 - val)
+        new_score = round(new_total * 100)
+        if new_score >= next_threshold:
+            candidates.append((fid, new_score-current_score))
+    if candidates:
+        candidates.sort(key=lambda x: x[1])
+        return {"factor": candidates[0][0], "delta_score": candidates[0][1]}
+    # if none alone reach next level, suggest the single largest gain
+    deltas = []
+    for f in factors:
+        fid = f["id"]
+        val = input_data.get(fid, 0)
+        if f.get("conditional_on") and not input_data.get(f["conditional_on"], 0):
+            continue
+        if val >= 1:
+            continue
+        deltas.append((fid, round(f["weight"] * (1 - val) * 100)))
+    if not deltas:
+        return None
+    deltas.sort(key=lambda x: -x[1])
+    return {"factor": deltas[0][0], "delta_score": deltas[0][1]}

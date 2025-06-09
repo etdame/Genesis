@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from scoring import calculate_score, recommend_next_level
 
 app = FastAPI()
 
@@ -18,3 +19,7 @@ async def ping():
 @app.post("/score")
 async def score(data: dict):
     return calculate_score(data)
+
+@app.post("/recommend")
+async def recommend_endpoint(data:dict): 
+    return recommend_next_level(data)
