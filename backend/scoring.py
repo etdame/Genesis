@@ -46,6 +46,8 @@ def calculate_score(input_data):
         "next_tip": next_tip
     }
 
+#TODO Return updated total score + level instead of delta. 
+#TODO Make it so the function can edit multiple factors instead of one
 def recommend_next_level(input_data):
     result = calculate_score(input_data)
     current_score = result["score"]
