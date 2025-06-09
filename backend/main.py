@@ -14,3 +14,7 @@ app.add_middleware(
 @app.get("/ping")
 async def ping():
     return {"status": "connected"}
+
+@app.post("/score")
+async def score(data: dict):
+    return calculate_score(data)
