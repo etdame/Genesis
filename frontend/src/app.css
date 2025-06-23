@@ -6,7 +6,6 @@
   --error: #ef4444;
   --gray-300: #444;
   --gray-700: #ddd;
-  /* Cursor glow position (percentages) */
   --mouse-x: 50%;
   --mouse-y: 50%;
 }
@@ -31,7 +30,6 @@ body {
   overflow: hidden;
 }
 
-/* Glow layer following cursor */
 .survey-card::before {
   content: "";
   position: absolute;
@@ -45,12 +43,10 @@ body {
   transition: background 0.1s ease-out;
 }
 
-/* Transitions */
 button, select, .input, .toggle span {
   transition: all 0.2s ease-in-out;
 }
 
-/* Rows */
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -67,7 +63,6 @@ button, select, .input, .toggle span {
   margin-bottom: 0.5rem;
 }
 
-/* Inputs */
 .input {
   flex: 1 1 30%;
   box-sizing: border-box;
@@ -88,7 +83,6 @@ button, select, .input, .toggle span {
   box-shadow: 0 0 0 3px rgba(127,90,240,0.3);
 }
 
-/* Buttons */
 .btn {
   padding: 0.75rem 1.5rem;
   background: var(--accent);
@@ -103,7 +97,6 @@ button, select, .input, .toggle span {
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* Toggle radios */
 .toggle-group {
   display: flex;
   gap: 0.5rem;
@@ -127,7 +120,6 @@ button, select, .input, .toggle span {
   border-color: var(--accent);
 }
 
-/* Button row & error */
 .button-row {
   display: flex;
   justify-content: center;
@@ -139,13 +131,13 @@ button, select, .input, .toggle span {
   margin-top: 1rem;
 }
 
-/* Result card */
 .result-card {
   background: var(--card-bg);
   padding: 1.5rem;
   border-radius: 8px;
   text-align: center;
   margin-top: 2rem;
+  overflow: hidden;
 }
 .result-card h2 {
   margin: 0 0 0.5rem;
@@ -161,15 +153,22 @@ button, select, .input, .toggle span {
   margin: 1rem auto 0;
 }
 
-/* Focus outline */
 :focus {
   outline: 3px dashed var(--accent);
   outline-offset: 2px;
 }
 
-/* Responsive tweaks */
 @media (max-width: 600px) {
-  .survey-card { padding: 1rem; margin: 2rem auto; }
-  .row { flex-direction: column; align-items: flex-start; }
-  .input { width: 100%; margin-top: 0.5rem; }
+  .survey-card {
+    padding: 1rem;
+    margin: 2rem auto;
+  }
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .input {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
 }

@@ -1,7 +1,7 @@
 <script>
   import { onMount, tick } from 'svelte'
   import { tweened } from 'svelte/motion'
-  import { fade } from 'svelte/transition'
+  import { fade, slide } from 'svelte/transition'
 
   const API = 'http://127.0.0.1:8000'
   let status = 'Connecting…'
@@ -14,7 +14,6 @@
   let rec = null, loadingRec = false, showRec = false
   let resultRef
 
-  // update CSS vars for glow
   let rect
   function handleMousemove(e) {
     if (!rect) rect = e.currentTarget.getBoundingClientRect()
@@ -100,10 +99,7 @@
   }
 </script>
 
-<main
-  class="survey-card"
-  on:mousemove={handleMousemove}
->
+<main class="survey-card" on:mousemove={handleMousemove}>
   <div>Server: {status}</div>
 
   {#if factors.length}
@@ -184,22 +180,27 @@
       {/if}
 
       {#if showRec}
-        <div class="mt-4">
-          <h3>💡 Next Tip{rec.factors ? 's' : ''}</h3>
-          {#if rec.factors}
-            <ul class="list-disc list-inside">
-              {#each rec.factors as fid}
-                <li>{fmap.get(fid).description}</li>
-              {/each}
-            </ul>
-            <p>Gain ~{rec.delta_score}% total.</p>
-          {:else}
-            <p>
-              Upgrade
-              <strong>{fmap.get(rec.factor).description}</strong>
-              to gain ~{rec.delta_score}%.
-            </p>
-          {/if}
+        <div
+          class="mt-4"
+          in:slide={{ duration: 400 }}
+          out:slide={{ duration: 200 }}
+        >
+          <div in:fade={{ duration: 300 }}>
+            <h3>💡 Next Tip{rec.factors ? 's' : ''}</h3>
+            {#if rec.factors}
+              <ul class="list-disc list-inside">
+                {#each rec.factors as fid}
+                  <li>{fmap.get(fid).description}</li>
+                {/each}
+              </ul>
+              <p>Gain ~{rec.delta_score}% total.</p>
+            {:else}
+              <p>
+                Upgrade <strong>{fmap.get(rec.factor).description}</strong>
+                to gain ~{rec.delta_score}%.
+              </p>
+            {/if}
+          </div>
         </div>
       {/if}
     </div>
