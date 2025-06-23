@@ -13,6 +13,17 @@
   let showRecBtn = false
   let rec = null, loadingRec = false, showRec = false
   let resultRef
+
+  // update CSS vars for glow
+  let rect
+  function handleMousemove(e) {
+    if (!rect) rect = e.currentTarget.getBoundingClientRect()
+    const x = ((e.clientX - rect.left) / rect.width) * 100
+    const y = ((e.clientY - rect.top) / rect.height) * 100
+    document.documentElement.style.setProperty('--mouse-x', `${x}%`)
+    document.documentElement.style.setProperty('--mouse-y', `${y}%`)
+  }
+
   $: fmap = new Map(factors.map(f => [f.id, f]))
 
   onMount(async () => {
@@ -89,7 +100,10 @@
   }
 </script>
 
-<main class="survey-card">
+<main
+  class="survey-card"
+  on:mousemove={handleMousemove}
+>
   <div>Server: {status}</div>
 
   {#if factors.length}
@@ -135,7 +149,6 @@
                 </label>
               </div>
             {/if}
-
           </div>
         {/if}
       {/each}
