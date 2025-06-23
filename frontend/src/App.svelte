@@ -141,7 +141,7 @@
   {#if showScore}
     <div class="result-card" bind:this={resultRef} in:fade>
       <h2>🔒 Privacy Score</h2>
-      <p class="score">{$animated.toFixed(0)}%</p>
+      <p class="score">{ $animated.toFixed(0) }%</p>
       <p>Level: {level}</p>
 
       {#if showRecBtn}
@@ -152,8 +152,17 @@
 
       {#if showRec}
         <div class="mt-4">
-          <h3>💡 Next Tip</h3>
-          <p>Enable <strong>{fmap.get(rec.factor).description}</strong> to gain ~{rec.delta_score}% more.</p>
+          <h3>💡 Next Tip{rec.factors ? 's' : ''}</h3>
+          {#if rec.factors}
+            <ul class="list-disc list-inside">
+              {#each rec.factors as fid}
+                <li>{ fmap.get(fid).description }</li>
+              {/each}
+            </ul>
+            <p>Gain ~{rec.delta_score}% total.</p>
+          {:else}
+            <p>Enable <strong>{ fmap.get(rec.factor).description }</strong> to gain ~{rec.delta_score}%.</p>
+          {/if}
         </div>
       {/if}
     </div>

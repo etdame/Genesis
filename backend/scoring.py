@@ -1,4 +1,5 @@
 import json
+import itertools
 
 with open("factors.json") as f:
     factors = json.load(f)["factors"]
@@ -51,43 +52,62 @@ def calculate_score(input_data):
 
 def recommend_next_level(input_data):
     result = calculate_score(input_data)
-    cs = result["score"]
-    cl = result["level"]
-    if cl == 7:
+    current_score = result["score"]
+    current_level = result["level"]
+    if current_level >= 7:
         return None
-    thresholds = [15, 30, 45, 60, 75, 90]
-    tgt = thresholds[cl - 1]
-    total_current = sum(result["breakdown"].values())
-    candidates = []
+    pct_thresholds = [15, 30, 45, 60, 75, 90]
+    next_thresh = pct_thresholds[current_level - 1] / 100.0
+    gap = next_thresh - (current_score / 100.0)
+    if gap <= 0:
+        return None
+    x, w, feats = {}, {}, []
     for f in factors:
         fid = f["id"]
-        raw = input_data.get(fid, 0)
+        val = input_data.get(fid, 0.0)
         cond = f.get("conditional_on")
-        if (cond and input_data.get(cond["factor"], 0) == 0) or raw >= 1:
+        if cond and input_data.get(cond["factor"], 0) == 0:
             continue
-        if f["type"] == "single-choice":
-            new_total = total_current + raw
-        else:
-            new_total = total_current + f["weight"] * (1 - raw)
-        new_score = round(new_total * 100)
-        if new_score >= tgt:
-            candidates.append((fid, new_score - cs))
-    if candidates:
-        candidates.sort(key=lambda x: x[1])
-        return {"factor": candidates[0][0], "delta_score": candidates[0][1]}
-    deltas = []
-    for f in factors:
+        if val >= 1.0:
+            continue
+        feats.append(f)
+        x[fid] = val
+        w[fid] = f["weight"]
+    def greedy_within_subset(subset):
+        rem = gap
+        deltas = {fid: 0.0 for fid in subset}
+        for fid in sorted(subset, key=lambda i: w[i], reverse=True):
+            avail = 1.0 - x[fid]
+            if avail <= 0:
+                continue
+            need = rem / w[fid]
+            adj = min(avail, need)
+            deltas[fid] = adj
+            rem -= w[fid] * adj
+            if rem <= 1e-8:
+                break
+        return (sum(deltas.values()), deltas) if rem <= 1e-8 else (None, None)
+    best_total, best_deltas = None, None
+    ids = [f["id"] for f in feats]
+    for r in range(1, len(ids) + 1):
+        for subset in itertools.combinations(ids, r):
+            total, deltas = greedy_within_subset(subset)
+            if total is not None and (best_total is None or total < best_total):
+                best_total, best_deltas = total, deltas
+    if best_deltas:
+        added_score = sum(w[fid] * d for fid, d in best_deltas.items())
+        return {
+            "factors": list(best_deltas.keys()),
+            "deltas": best_deltas,
+            "delta_score": round(added_score * 100)
+        }
+    single = []
+    for f in feats:
         fid = f["id"]
-        raw = input_data.get(fid, 0)
-        cond = f.get("conditional_on")
-        if (cond and input_data.get(cond["factor"], 0) == 0) or raw >= 1:
-            continue
-        if f["type"] == "single-choice":
-            gain = round((1 - raw) * 100)
-        else:
-            gain = round(f["weight"] * (1 - raw) * 100)
-        deltas.append((fid, gain))
-    if not deltas:
+        gain = round(f["weight"] * (1.0 - x[fid]) * 100)
+        single.append((fid, gain))
+    if not single:
         return None
-    deltas.sort(key=lambda x: -x[1])
-    return {"factor": deltas[0][0], "delta_score": deltas[0][1]}
+    single.sort(key=lambda x: -x[1])
+    fid, gain = single[0]
+    return {"factor": fid, "delta_score": gain}
