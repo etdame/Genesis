@@ -27,8 +27,7 @@
       const j = await r.json()
       factors = j.factors
       factors.forEach(f => {
-        if (f.type === 'single-choice') formData[f.id] = f.options[0].id
-        else formData[f.id] = 0
+        formData[f.id] = f.type === 'single-choice' ? f.options[0].id : 0
       })
     } catch {
       error = 'Failed to load questionnaire'
@@ -40,8 +39,8 @@
       Object.entries(formData).map(([k, v]) => {
         const f = fmap.get(k)
         if (f.type === 'single-choice') {
-          const opt = f.options.find(o => o.id === v)
-          return [k, opt ? opt.value : 0]
+          const o = f.options.find(o => o.id === v)
+          return [k, o ? o.value : 0]
         }
         return [k, Number(v)]
       })
@@ -60,9 +59,7 @@
       if (!r.ok) throw new Error(`HTTP ${r.status}`)
       const j = await r.json()
       score = j.score; level = j.level
-      showScore = true
-      animated.set(score)
-      await tick()
+      showScore = true; animated.set(score); await tick()
       resultRef.scrollIntoView({ behavior: 'smooth', block: 'start' })
       showRecBtn = level < 7
     } catch (e) {
@@ -82,9 +79,7 @@
         body: JSON.stringify(payload)
       })
       if (!r.ok) throw new Error(`HTTP ${r.status}`)
-      rec = await r.json()
-      showRec = !!rec
-      await tick()
+      rec = await r.json(); showRec = !!rec; await tick()
       resultRef.scrollIntoView({ behavior: 'smooth', block: 'start' })
     } catch (e) {
       error = e.message
@@ -94,7 +89,7 @@
   }
 </script>
 
-<main class="container">
+<main class="survey-card">
   <div>Server: {status}</div>
 
   {#if factors.length}
@@ -103,27 +98,48 @@
         {#if !f.conditional_on || f.conditional_on.options.includes(formData[f.conditional_on.factor])}
           <div class="row">
             <label for={f.id}>{f.description}</label>
+
             {#if f.type === 'single-choice'}
               <select id={f.id} bind:value={formData[f.id]} class="input">
                 {#each f.options as o}
                   <option value={o.id}>{o.label}</option>
                 {/each}
               </select>
+
             {:else if f.type === 'scale'}
               <select id={f.id} bind:value={formData[f.id]} class="input">
-                {#each Object.entries(f.labels) as [v,label]}
+                {#each Object.entries(f.labels) as [v, label]}
                   <option value={v / f.scale.max}>{label}</option>
                 {/each}
               </select>
+
             {:else}
-              <select id={f.id} bind:value={formData[f.id]} class="input">
-                <option value={0}>No</option>
-                <option value={1}>Yes</option>
-              </select>
+              <div class="toggle-group">
+                <label class="toggle">
+                  <input
+                    type="radio"
+                    name={f.id}
+                    bind:group={formData[f.id]}
+                    value="0"
+                  />
+                  <span>No</span>
+                </label>
+                <label class="toggle">
+                  <input
+                    type="radio"
+                    name={f.id}
+                    bind:group={formData[f.id]}
+                    value="1"
+                  />
+                  <span>Yes</span>
+                </label>
+              </div>
             {/if}
+
           </div>
         {/if}
       {/each}
+
       <div class="button-row">
         <button class="btn" disabled={loading}>
           {loading ? 'Calculating…' : 'Calculate Your Privacy Score'}
@@ -141,11 +157,15 @@
   {#if showScore}
     <div class="result-card" bind:this={resultRef} in:fade>
       <h2>🔒 Privacy Score</h2>
-      <p class="score">{ $animated.toFixed(0) }%</p>
+      <p class="score">{$animated.toFixed(0)}%</p>
       <p>Level: {level}</p>
 
       {#if showRecBtn}
-        <button class="btn level-up" on:click={handleRecommend} disabled={loadingRec}>
+        <button
+          class="btn level-up"
+          on:click={handleRecommend}
+          disabled={loadingRec}
+        >
           {loadingRec ? 'Loading…' : 'Want to level up?'}
         </button>
       {/if}
@@ -156,12 +176,16 @@
           {#if rec.factors}
             <ul class="list-disc list-inside">
               {#each rec.factors as fid}
-                <li>{ fmap.get(fid).description }</li>
+                <li>{fmap.get(fid).description}</li>
               {/each}
             </ul>
             <p>Gain ~{rec.delta_score}% total.</p>
           {:else}
-            <p>Enable <strong>{ fmap.get(rec.factor).description }</strong> to gain ~{rec.delta_score}%.</p>
+            <p>
+              Upgrade
+              <strong>{fmap.get(rec.factor).description}</strong>
+              to gain ~{rec.delta_score}%.
+            </p>
           {/if}
         </div>
       {/if}
