@@ -1,5 +1,5 @@
 <script>
-  import MatrixRain from './components/matrix.svelte';
+  import Matrix from './components/matrix.svelte';
   import { onMount, tick } from 'svelte';
   import { tweened } from 'svelte/motion';
   import { fade, slide } from 'svelte/transition';
@@ -91,8 +91,7 @@
       });
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       rec = await r.json();
-      showRec = true;
-      await tick();
+      showRec = true; await tick();
       tipRef.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } catch (e) {
       error = e.message;
@@ -102,7 +101,7 @@
   }
 </script>
 
-<MatrixRain />
+<Matrix />
 
 <main class="survey-card" on:mousemove={handleMousemove}>
   <div>Server: {status}</div>
@@ -128,15 +127,15 @@
           </select>
         </div>
 
-        {#if formData.network_protection==='vpn'||
-              formData.network_protection==='vpn_adv'}
-          <div class="row" in:slide={{ duration:300 }} out:slide={{ duration:200 }}>
-            <div in:fade={{ duration:300 }}>
+        {#if formData.network_protection === 'vpn' ||
+              formData.network_protection === 'vpn_adv'}
+          <div class="row" in:slide={{ duration: 300 }} out:slide={{ duration: 200 }}>
+            <div in:fade={{ duration: 300 }}>
               <label for="self_hosted_vpn">
                 {fmap.get('self_hosted_vpn').description}
               </label>
             </div>
-            <div class="toggle-group" in:fade={{ duration:300 }}>
+            <div class="toggle-group" in:fade={{ duration: 300 }}>
               <label class="toggle">
                 <input
                   type="radio"
@@ -178,8 +177,8 @@
       <!-- Section 2: Account & Authentication -->
       <div class="cloud">
         <h2>Account & Authentication</h2>
-        {#each factors.filter(f=>
-          ["password_hygiene","two_factor_authentication","email_practices"]
+        {#each factors.filter(f =>
+          ['password_hygiene', 'two_factor_authentication', 'email_practices']
           .includes(f.id)
         ) as f}
           <div class="row">
@@ -192,8 +191,8 @@
               </select>
             {:else}
               <select id={f.id} bind:value={formData[f.id]} class="input">
-                {#each Object.entries(f.labels) as [v,label]}
-                  <option value={v/f.scale.max}>{label}</option>
+                {#each Object.entries(f.labels) as [v, label]}
+                  <option value={v / f.scale.max}>{label}</option>
                 {/each}
               </select>
             {/if}
@@ -206,8 +205,8 @@
       <!-- Section 3: Software & Data Hygiene -->
       <div class="cloud">
         <h2>Software & Data Hygiene</h2>
-        {#each factors.filter(f=>
-          ["browser_metadata_hygiene","open_source_usage","encryption_at_rest"]
+        {#each factors.filter(f =>
+          ['browser_metadata_hygiene', 'open_source_usage', 'encryption_at_rest']
           .includes(f.id)
         ) as f}
           <div class="row">
@@ -238,7 +237,7 @@
 
   {#if showScore}
     <div class="result-card" bind:this={resultRef}>
-      <div in:fade={{ duration:300 }}>
+      <div in:fade={{ duration: 300 }}>
         <h2>🔒 Privacy Score</h2>
         <p class="score">{ $animated.toFixed(0) }%</p>
         <p>Level: {level}</p>
@@ -251,9 +250,9 @@
       {/if}
 
       {#if showRec}
-        <div class="mt-4" bind:this={tipRef} in:slide={{ duration:400 }} out:slide={{ duration:200 }}>
-          <div in:fade={{ duration:300 }}>
-            <h3>💡 Next Tip{rec.factors?'s':''}</h3>
+        <div class="mt-4" bind:this={tipRef} in:slide={{ duration: 400 }} out:slide={{ duration: 200 }}>
+          <div in:fade={{ duration: 300 }}>
+            <h3>💡 Next Tip{rec.factors ? 's' : ''}</h3>
             {#if rec.factors}
               <ul class="list-disc list-inside">
                 {#each rec.factors as fid}

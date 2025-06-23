@@ -13,14 +13,14 @@
     let drops = Array(columns).fill(1);
 
     const frameRate = 25;
-    let lastFrameTime = Date.now();
+    let lastFrame = Date.now();
 
     function draw() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+      ctx.fillStyle = 'rgba(0,0,0,0.04)';
       ctx.fillRect(0, 0, width, height);
 
       ctx.fillStyle = 'rgba(127,90,240,0.8)';
-      ctx.font = '16px monospace';
+      ctx.font = '20px monospace';
 
       for (let i = 0; i < drops.length; i++) {
         const text = charArray[Math.floor(Math.random() * charArray.length)];
@@ -33,15 +33,15 @@
       }
     }
 
-    function animate() {
+    function loop() {
       const now = Date.now();
-      if (now - lastFrameTime > 1000 / frameRate) {
+      if (now - lastFrame > 1000 / frameRate) {
         draw();
-        lastFrameTime = now;
+        lastFrame = now;
       }
-      requestAnimationFrame(animate);
+      requestAnimationFrame(loop);
     }
-    animate();
+    loop();
 
     const handleResize = () => {
       width = canvas.width = window.innerWidth;
@@ -58,13 +58,12 @@
   });
 </script>
 
-<canvas bind:this={canvas} class="matrix-canvas"></canvas>
+<canvas bind:this={canvas} class="matrix-canvas" />
 
 <style>
 .matrix-canvas {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   width: 100vw;
   height: 100vh;
   z-index: -2;

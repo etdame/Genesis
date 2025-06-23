@@ -24,10 +24,11 @@ body {
   width: 1040px;
   margin: 3rem auto;
   padding: 2rem;
-  background: rgba(var(--card-bg-rgb),0.75);
+  background: rgba(var(--card-bg-rgb), 0.75);
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+  backdrop-filter: blur(8px);
 }
 
 .survey-card::before {
@@ -37,10 +38,10 @@ body {
   background: radial-gradient(
     circle at var(--mouse-x) var(--mouse-y),
     rgba(127,90,240,0.3) 0%,
-    transparent 30%
+    transparent 15%
   );
   pointer-events: none;
-  transition: background 0.1s ease-out;
+  transition: background 0.05s ease-out;
 }
 
 .clouds-container {
@@ -52,7 +53,6 @@ body {
   margin-bottom: 2rem;
 }
 
-/* connector between clouds */
 .connector {
   width: 4px;
   height: 2rem;
@@ -62,13 +62,14 @@ body {
 }
 
 .cloud {
-  background: rgba(var(--card-bg-rgb),0.75);
+  background: rgba(var(--card-bg-rgb), 0.75);
   padding: 1.5rem;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   width: 90%;
   max-width: 800px;
   z-index: 1;
+  backdrop-filter: blur(8px);
 }
 .cloud h2 {
   margin-top: 0;
@@ -82,7 +83,7 @@ body {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  background: rgba(var(--card-bg-rgb),0.6);
+  background: rgba(var(--card-bg-rgb), 0.6);
   padding: 0.75rem 1rem;
   border-radius: 8px;
   margin-bottom: 1rem;
@@ -159,7 +160,7 @@ body {
 }
 
 .result-card {
-  background: rgba(var(--card-bg-rgb),0.75);
+  background: rgba(var(--card-bg-rgb), 0.75);
   padding: 1.5rem;
   border-radius: 16px;
   text-align: center;
