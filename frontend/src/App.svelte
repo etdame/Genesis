@@ -12,7 +12,7 @@
   let animated = tweened(0, { duration: 800 })
   let showRecBtn = false
   let rec = null, loadingRec = false, showRec = false
-  let resultRef
+  let resultRef, tipRef
 
   let rect
   function handleMousemove(e) {
@@ -70,7 +70,7 @@
       const j = await r.json()
       score = j.score; level = j.level
       showScore = true; animated.set(score); await tick()
-      resultRef.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      resultRef.scrollIntoView({ behavior: 'smooth', block: 'center' })
       showRecBtn = level < 7
     } catch (e) {
       error = e.message
@@ -89,8 +89,13 @@
         body: JSON.stringify(payload)
       })
       if (!r.ok) throw new Error(`HTTP ${r.status}`)
-      rec = await r.json(); showRec = !!rec; await tick()
-      resultRef.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      rec = await r.json()
+      showRec = true
+      await tick()                    // wait for slide to render
+      tipRef.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      })
     } catch (e) {
       error = e.message
     } finally {
@@ -164,10 +169,12 @@
   {/if}
 
   {#if showScore}
-    <div class="result-card" bind:this={resultRef} in:fade>
-      <h2>🔒 Privacy Score</h2>
-      <p class="score">{$animated.toFixed(0)}%</p>
-      <p>Level: {level}</p>
+    <div class="result-card" bind:this={resultRef}>
+      <div in:fade={{ duration: 300 }}>
+        <h2>🔒 Privacy Score</h2>
+        <p class="score">{$animated.toFixed(0)}%</p>
+        <p>Level: {level}</p>
+      </div>
 
       {#if showRecBtn}
         <button
@@ -182,6 +189,7 @@
       {#if showRec}
         <div
           class="mt-4"
+          bind:this={tipRef}
           in:slide={{ duration: 400 }}
           out:slide={{ duration: 200 }}
         >

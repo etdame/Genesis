@@ -137,7 +137,7 @@ button, select, .input, .toggle span {
   border-radius: 8px;
   text-align: center;
   margin-top: 2rem;
-  overflow: hidden;
+  /* no fade here */
 }
 .result-card h2 {
   margin: 0 0 0.5rem;
