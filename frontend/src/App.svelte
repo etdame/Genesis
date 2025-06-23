@@ -110,29 +110,63 @@
       <!-- Section 1: Connectivity & Platform -->
       <div class="cloud">
         <h2>Connectivity & Platform</h2>
-        {#each factors.filter(f=>["network_protection","self_hosted_vpn","os_telemetry"].includes(f.id)) as f}
-          <div class="row">
-            <label for={f.id}>{f.description}</label>
-            {#if f.type==="single-choice"}
-              <select id={f.id} bind:value={formData[f.id]} class="input">
-                {#each f.options as o}
-                  <option value={o.id}>{o.label}</option>
-                {/each}
-              </select>
-            {:else}
-              <div class="toggle-group">
-                <label class="toggle">
-                  <input type="radio" name={f.id} bind:group={formData[f.id]} value="0"/>
-                  <span>No</span>
-                </label>
-                <label class="toggle">
-                  <input type="radio" name={f.id} bind:group={formData[f.id]} value="1"/>
-                  <span>Yes</span>
-                </label>
-              </div>
-            {/if}
+
+        <!-- Network Protection -->
+        <div class="row">
+          <label for="network_protection">{fmap.get('network_protection').description}</label>
+          <select
+            id="network_protection"
+            bind:value={formData.network_protection}
+            class="input"
+          >
+            {#each fmap.get('network_protection').options as o}
+              <option value={o.id}>{o.label}</option>
+            {/each}
+          </select>
+        </div>
+
+        <!-- Self-Hosted VPN, conditional -->
+        {#if formData.network_protection === 'vpn' || formData.network_protection === 'vpn_adv'}
+          <div class="row" in:slide={{ duration: 300 }} out:slide={{ duration: 200 }}>
+            <div in:fade={{ duration: 300 }}>
+              <label for="self_hosted_vpn">{fmap.get('self_hosted_vpn').description}</label>
+            </div>
+            <div class="toggle-group" in:fade={{ duration: 300 }}>
+              <label class="toggle">
+                <input
+                  type="radio"
+                  name="self_hosted_vpn"
+                  bind:group={formData.self_hosted_vpn}
+                  value="0"
+                />
+                <span>No</span>
+              </label>
+              <label class="toggle">
+                <input
+                  type="radio"
+                  name="self_hosted_vpn"
+                  bind:group={formData.self_hosted_vpn}
+                  value="1"
+                />
+                <span>Yes</span>
+              </label>
+            </div>
           </div>
-        {/each}
+        {/if}
+
+        <!-- OS Telemetry -->
+        <div class="row">
+          <label for="os_telemetry">{fmap.get('os_telemetry').description}</label>
+          <select
+            id="os_telemetry"
+            bind:value={formData.os_telemetry}
+            class="input"
+          >
+            {#each fmap.get('os_telemetry').options as o}
+              <option value={o.id}>{o.label}</option>
+            {/each}
+          </select>
+        </div>
       </div>
 
       <!-- Section 2: Account & Authentication -->
