@@ -1,13 +1,18 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from scoring import calculate_score, recommend_next_level
+import scoring
 
 app = FastAPI()
 
-# Allow requests from your Svelte dev server
+# allow both localhost and 127.0.0.1 from Vite
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -16,10 +21,15 @@ app.add_middleware(
 async def ping():
     return {"status": "connected"}
 
+@app.get("/factors")
+async def get_factors():
+    # serve the same factors.json data
+    return {"factors": scoring.factors}
+
 @app.post("/score")
-async def score(data: dict):
-    return calculate_score(data)
+async def score_endpoint(data: dict):
+    return scoring.calculate_score(data)
 
 @app.post("/recommend")
-async def recommend_endpoint(data:dict): 
-    return recommend_next_level(data)
+async def recommend_endpoint(data: dict):
+    return scoring.recommend_next_level(data)
