@@ -24,7 +24,6 @@
     6: "Animals & Humans",
     7: "Rest"
   };
-
   $: rankTitle = levelTitles[level] || "";
   $: fmap = new Map(factors.map(f => [f.id, f]));
 
@@ -34,7 +33,7 @@
     const y = ((e.clientY - rect.top)  / rect.height * 100).toFixed(2) + '%';
     document.documentElement.style.setProperty('--mouse-x', x);
     document.documentElement.style.setProperty('--mouse-y', y);
-    if (!hasPointer) hasPointer = true;
+    hasPointer = true;
   }
 
   onMount(async () => {
@@ -118,11 +117,12 @@
   bind:this={surveyCard}
   on:mousemove={handleMousemove}
 >
-  <div>Server: {status}</div>
+  <div in:fade={{ duration: 300 }}>
+    Server: {status}
+  </div>
 
   {#if factors.length}
     <div class="clouds-container">
-      <!-- Section 1 -->
       <div class="cloud" in:fade={{ delay: 200, duration: 400 }}>
         <h2>Connectivity & Platform</h2>
         <div class="row">
@@ -133,21 +133,17 @@
             {/each}
           </select>
         </div>
+
         {#if formData.network_protection === 'vpn' || formData.network_protection === 'vpn_adv'}
           <div class="row" in:slide={{ duration: 300 }} out:slide={{ duration: 200 }}>
             <label>{fmap.get('self_hosted_vpn').description}</label>
             <div class="toggle-group">
-              <label class="toggle">
-                <input type="radio" bind:group={formData.self_hosted_vpn} value="0" />
-                <span>No</span>
-              </label>
-              <label class="toggle">
-                <input type="radio" bind:group={formData.self_hosted_vpn} value="1" />
-                <span>Yes</span>
-              </label>
+              <label class="toggle"><input type="radio" bind:group={formData.self_hosted_vpn} value="0" /><span>No</span></label>
+              <label class="toggle"><input type="radio" bind:group={formData.self_hosted_vpn} value="1" /><span>Yes</span></label>
             </div>
           </div>
         {/if}
+
         <div class="row">
           <label>{fmap.get('os_telemetry').description}</label>
           <select bind:value={formData.os_telemetry} class="input">
@@ -160,7 +156,6 @@
 
       <div class="connector" in:fade={{ delay: 350, duration: 300 }} />
 
-      <!-- Section 2 -->
       <div class="cloud" in:fade={{ delay: 400, duration: 400 }}>
         <h2>Account & Authentication</h2>
         {#each factors.filter(f =>
@@ -187,7 +182,6 @@
 
       <div class="connector" in:fade={{ delay: 650, duration: 300 }} />
 
-      <!-- Section 3 -->
       <div class="cloud" in:fade={{ delay: 700, duration: 400 }}>
         <h2>Software & Data Hygiene</h2>
         {#each factors.filter(f =>
@@ -206,12 +200,7 @@
     </div>
 
     <div class="button-row">
-      <button
-        class="btn"
-        on:click={handlePredict}
-        disabled={loading}
-        in:fade={{ delay: 900, duration: 400 }}
-      >
+      <button class="btn" on:click={handlePredict} disabled={loading} in:fade={{ delay: 900, duration: 400 }}>
         {loading ? 'Calculating…' : 'Calculate Your Privacy Score'}
       </button>
     </div>
@@ -224,12 +213,10 @@
   {/if}
 
   {#if showScore}
-    <div class="result-card" bind:this={resultRef}>
-      <div in:fade={{ duration: 300 }}>
-        <h2>Privacy Score</h2>
-        <p class="score">{$animated.toFixed(0)}%</p>
-        <p class="level">{rankTitle}</p>
-      </div>
+    <div class="result-card" bind:this={resultRef} in:fade={{ duration: 300 }}>
+      <h2>Privacy Score</h2>
+      <p class="score">{$animated.toFixed(0)}%</p>
+      <p class="level">{rankTitle}</p>
 
       {#if showRecBtn}
         <button class="btn level-up" on:click={handleRecommend} disabled={loadingRec}>
@@ -249,10 +236,7 @@
               </ul>
               <p>Gain ~{rec.delta_score}% total.</p>
             {:else}
-              <p>
-                Upgrade <strong>{fmap.get(rec.factor).description}</strong>
-                to gain ~{rec.delta_score}%.
-              </p>
+              <p>Upgrade <strong>{fmap.get(rec.factor).description}</strong> to gain ~{rec.delta_score}%.</p>
             {/if}
           </div>
         </div>

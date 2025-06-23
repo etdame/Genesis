@@ -222,7 +222,7 @@ body {
 }
 
 .level {
-  font-size: 1.10rem;
+  font-size: 1.25rem;
   color: var(--fg);
   margin-top: 0.25rem;
 }
@@ -247,6 +247,7 @@ body {
   content: "";
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
+  /* smaller, less intense glow */
   background: radial-gradient(
     circle at var(--mouse-x) var(--mouse-y),
     rgba(127, 90, 240, 0.15) 0%,
@@ -254,9 +255,11 @@ body {
   );
   pointer-events: none;
   transition: background 0.05s ease-out;
-  opacity: 0;
+  opacity: 0; /* still hidden until pointer moves */
 }
+
 .survey-card.has-pointer::before {
+  /* show once we’ve moved */
   opacity: 1;
 }
 

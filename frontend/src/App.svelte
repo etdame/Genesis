@@ -2,9 +2,9 @@
   import Matrix from './components/matrix.svelte';
   import Score from './Score.svelte';
   import Methodology from './pages/Methodology.svelte';
+  import { fade } from 'svelte/transition';
 
   let activeTab = 'score';
-
   function select(tab) {
     activeTab = tab;
   }
@@ -12,8 +12,8 @@
 
 <Matrix />
 
-<main class="survey-card">
-  <nav class="menu">
+<main class="survey-card" in:fade={{ duration: 400 }}>
+  <nav class="menu" in:fade={{ delay: 100, duration: 300 }}>
     <button
       class="menu-button {activeTab === 'score' ? 'active' : ''}"
       on:click={() => select('score')}
@@ -29,8 +29,12 @@
   </nav>
 
   {#if activeTab === 'score'}
-    <Score />
+    <div in:fade={{ delay: 400, duration: 400 }}>
+      <Score />
+    </div>
   {:else}
-    <Methodology />
+    <div in:fade={{ delay: 400, duration: 400 }}>
+      <Methodology />
+    </div>
   {/if}
 </main>
