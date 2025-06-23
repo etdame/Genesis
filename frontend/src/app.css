@@ -21,11 +21,11 @@ body {
 .survey-card {
   position: relative;
   max-width: 95%;
-  width: 1040px;            /* 800px * 1.3 */
+  width: 1040px; /* 800px * 1.3 */
   margin: 3rem auto;
   padding: 2rem;
   background: var(--card-bg);
-  border-radius: 12px;
+  border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
@@ -43,7 +43,7 @@ body {
   transition: background 0.1s ease-out;
 }
 
-/* Vertical stack of clouds */
+/* Vertical stack of panels */
 .clouds-container {
   display: flex;
   flex-direction: column;
@@ -53,7 +53,6 @@ body {
   margin-bottom: 2rem;
 }
 
-/* Connector line down the middle */
 .clouds-container::before {
   content: "";
   position: absolute;
@@ -66,26 +65,25 @@ body {
   border-radius: 2px;
 }
 
-/* Each cloud panel */
+/* Each panel as rounded rectangle */
 .cloud {
   background: var(--card-bg);
   padding: 1.5rem;
-  border-radius: 999px;
+  border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   width: 90%;
   max-width: 800px;
   position: relative;
-  z-index: 1; /* above connector */
+  z-index: 1;
 }
-
-/* Section headings */
 .cloud h2 {
   margin-top: 0;
   margin-bottom: 1rem;
   text-align: center;
+  font-size: 1.25rem;
 }
 
-/* Retain existing row and control styles */
+/* Standard row and input styling */
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -140,6 +138,9 @@ body {
   display: flex;
   gap: 0.5rem;
 }
+.toggle input {
+  display: none;
+}
 .toggle span {
   padding: 0.5rem 1rem;
   border: 1px solid var(--gray-300);
@@ -167,7 +168,7 @@ body {
 .result-card {
   background: var(--card-bg);
   padding: 1.5rem;
-  border-radius: 8px;
+  border-radius: 16px;
   text-align: center;
   margin-top: 2rem;
 }

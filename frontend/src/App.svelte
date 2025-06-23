@@ -141,17 +141,17 @@
         {#each factors.filter(f=>["password_hygiene","two_factor_authentication","email_practices"].includes(f.id)) as f}
           <div class="row">
             <label for={f.id}>{f.description}</label>
-            {#if f.type==="scale"||f.type==="single-choice"}
+            {#if f.options}
               <select id={f.id} bind:value={formData[f.id]} class="input">
-                {#if f.options}
-                  {#each f.options as o}
-                    <option value={o.id}>{o.label}</option>
-                  {/each}
-                {:else}
-                  {#each Object.entries(f.labels) as [v,label]}
-                    <option value={v/f.scale.max}>{label}</option>
-                  {/each}
-                {/if}
+                {#each f.options as o}
+                  <option value={o.id}>{o.label}</option>
+                {/each}
+              </select>
+            {:else}
+              <select id={f.id} bind:value={formData[f.id]} class="input">
+                {#each Object.entries(f.labels) as [v,label]}
+                  <option value={v/f.scale.max}>{label}</option>
+                {/each}
               </select>
             {/if}
           </div>
@@ -165,15 +165,9 @@
           <div class="row">
             <label for={f.id}>{f.description}</label>
             <select id={f.id} bind:value={formData[f.id]} class="input">
-              {#if f.options}
-                {#each f.options as o}
-                  <option value={o.id}>{o.label}</option>
-                {/each}
-              {:else}
-                {#each Object.entries(f.labels) as [v,label]}
-                  <option value={v/f.scale.max}>{label}</option>
-                {/each}
-              {/if}
+              {#each f.options as o}
+                <option value={o.id}>{o.label}</option>
+              {/each}
             </select>
           </div>
         {/each}
@@ -181,7 +175,6 @@
 
     </div>
 
-    <!-- Calculate button -->
     <div class="button-row">
       <button class="btn" on:click={handlePredict} disabled={loading}>
         {loading ? 'Calculating…' : 'Calculate Your Privacy Score'}
