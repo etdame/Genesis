@@ -84,6 +84,8 @@
       if (!r.ok) throw new Error(`HTTP ${r.status}`)
       rec = await r.json()
       showRec = !!rec
+      await tick()
+      resultRef.scrollIntoView({ behavior: 'smooth', block: 'start' })
     } catch (e) {
       error = e.message
     } finally {
@@ -122,7 +124,6 @@
           </div>
         {/if}
       {/each}
-
       <div class="button-row">
         <button class="btn" disabled={loading}>
           {loading ? 'Calculating…' : 'Calculate Your Privacy Score'}
