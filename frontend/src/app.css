@@ -37,18 +37,50 @@ body {
   top: 0; left: 0; right: 0; bottom: 0;
   background: radial-gradient(
     circle at var(--mouse-x) var(--mouse-y),
-    rgba(127,90,240,0.3) 0%,
+    rgba(127, 90, 240, 0.3) 0%,
     transparent 15%
   );
   pointer-events: none;
   transition: background 0.05s ease-out;
 }
 
+/* Top‐centered menu */
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  color: #888;
+  transition: color 0.2s, border-bottom 0.2s;
+}
+
+.menu-button:focus {
+  outline: none;
+}
+
+.menu-button:hover {
+  color: var(--accent);
+}
+
+.menu-button.active {
+  color: #fff;
+  border-bottom: 2px solid var(--accent);
+}
+
+/* Clouds flow */
 .clouds-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
   gap: 0;
   margin-bottom: 2rem;
 }
@@ -65,15 +97,15 @@ body {
   background: rgba(var(--card-bg-rgb), 0.75);
   padding: 1.5rem;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 90%;
   max-width: 800px;
   z-index: 1;
   backdrop-filter: blur(8px);
 }
+
 .cloud h2 {
-  margin-top: 0;
-  margin-bottom: 1rem;
+  margin: 0 0 1rem;
   text-align: center;
   font-size: 1.25rem;
 }
@@ -88,6 +120,7 @@ body {
   border-radius: 8px;
   margin-bottom: 1rem;
 }
+
 .row label {
   font-weight: 500;
   flex: 1 1 60%;
@@ -108,6 +141,7 @@ body {
   background-repeat: no-repeat;
   background-position: right 0.5rem center;
 }
+
 .input:focus {
   outline: none;
   border-color: var(--accent);
@@ -122,7 +156,9 @@ body {
   border-radius: 6px;
   cursor: pointer;
   font-size: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
+
 .btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -132,16 +168,20 @@ body {
   display: flex;
   gap: 0.5rem;
 }
+
 .toggle input {
   display: none;
 }
+
 .toggle span {
   padding: 0.5rem 1rem;
   border: 1px solid var(--gray-300);
   border-radius: 999px;
-  display: inline-block;
   color: var(--fg);
+  display: inline-block;
+  transition: background 0.2s, border-color 0.2s;
 }
+
 .toggle input:checked + span {
   background: var(--accent);
   color: #12151C;
@@ -153,6 +193,7 @@ body {
   justify-content: center;
   margin-top: 1.5rem;
 }
+
 .error {
   color: var(--error);
   text-align: center;
@@ -165,16 +206,26 @@ body {
   border-radius: 16px;
   text-align: center;
   margin-top: 2rem;
+  backdrop-filter: blur(8px);
 }
+
 .result-card h2 {
   margin: 0 0 0.5rem;
   font-size: 1.25rem;
 }
+
 .score {
   font-size: 3rem;
   color: var(--accent);
   margin: 0;
 }
+
+.level {
+  font-size: 1rem;
+  color: var(--fg);
+  margin-top: 0.25rem;
+}
+
 .level-up {
   display: block;
   margin: 1rem auto 0;
@@ -186,6 +237,138 @@ body {
 }
 
 @media (max-width: 900px) {
-  .survey-card { width: 100%; }
-  .cloud { width: 100%; }
+  .survey-card, .cloud {
+    width: 100%;
+  }
+}
+
+/* --- Methodology Bento Layout --- */
+
+.method-container {
+  padding: 2rem 0;
+}
+
+.method-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--accent);
+}
+
+.method-subtitle {
+  text-align: center;
+  font-size: 1.25rem;
+  color: var(--fg);
+  margin-bottom: 2rem;
+}
+
+.method-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.method-card {
+  background: rgba(var(--card-bg-rgb), 0.85);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  backdrop-filter: blur(6px);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.method-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.method-card.wide {
+  flex: 2;
+}
+
+.method-card.narrow {
+  flex: 1;
+}
+
+.card-heading {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--fg);
+}
+
+.card-text {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--fg);
+}
+
+@media (max-width: 600px) {
+  .method-row {
+    flex-direction: column;
+  }
+}
+
+/* --- Mapping Scores Carousel --- */
+
+.mapping-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mapping-carousel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.arrow {
+  background: none;
+  border: none;
+  color: var(--fg);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.arrow:focus {
+  outline: none;
+}
+
+.arrow:hover {
+  color: var(--accent);
+}
+
+.level-card {
+  flex: 1;
+  background: rgba(var(--card-bg-rgb), 0.9);
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  user-select: none;
+}
+
+.level-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.level-card p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--fg);
+}
+
+@media (max-width: 600px) {
+  .mapping-carousel {
+    flex-direction: column;
+  }
+  .arrow {
+    font-size: 1.25rem;
+  }
 }

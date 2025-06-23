@@ -18,14 +18,11 @@
     function draw() {
       ctx.fillStyle = 'rgba(0,0,0,0.04)';
       ctx.fillRect(0, 0, width, height);
-
       ctx.fillStyle = 'rgba(127,90,240,0.8)';
       ctx.font = '20px monospace';
-
       for (let i = 0; i < drops.length; i++) {
         const text = charArray[Math.floor(Math.random() * charArray.length)];
         ctx.fillText(text, i * 20, drops[i] * 20);
-
         if (drops[i] * 20 > height && Math.random() > 0.975) {
           drops[i] = 0;
         }
