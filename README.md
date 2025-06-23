@@ -1,7 +1,7 @@
 # Genesis: Your Personal Privacy Journey
 
 > “In six days God created the heavens and the earth, and on the seventh day He rested.”  
-> Securing your data takes effort—but once you reach the summit, you may rest in private.
+> Securing your data takes effort, but once you reach the summit, you may rest in private.
 
 Genesis is a lightweight two-page web app that quantifies your online anonymity, maps it to one of seven intuitive “creation” levels, and recommends the single highest-impact change to help you climb to the next rung most efficiently.
 
