@@ -25,7 +25,6 @@
   };
 
   $: rankTitle = levelTitles[level] || "";
-
   $: fmap = new Map(factors.map(f => [f.id, f]));
 
   onMount(async () => {
@@ -110,6 +109,7 @@
     <!-- Section 1 -->
     <div class="cloud" in:fade={{ delay: 200, duration: 400 }}>
       <h2>Connectivity & Platform</h2>
+
       <div class="row">
         <label>{fmap.get('network_protection').description}</label>
         <select bind:value={formData.network_protection} class="input">
@@ -121,16 +121,16 @@
 
       {#if formData.network_protection === 'vpn' || formData.network_protection === 'vpn_adv'}
         <div class="row" in:slide={{ duration: 300 }} out:slide={{ duration: 200 }}>
-          <div in:fade={{ delay: 300, duration: 300 }}>
-            <label>{fmap.get('self_hosted_vpn').description}</label>
-            <div class="toggle-group">
-              <label class="toggle">
-                <input type="radio" bind:group={formData.self_hosted_vpn} value="0" /><span>No</span>
-              </label>
-              <label class="toggle">
-                <input type="radio" bind:group={formData.self_hosted_vpn} value="1" /><span>Yes</span>
-              </label>
-            </div>
+          <label>{fmap.get('self_hosted_vpn').description}</label>
+          <div class="toggle-group">
+            <label class="toggle">
+              <input type="radio" bind:group={formData.self_hosted_vpn} value="0" />
+              <span>No</span>
+            </label>
+            <label class="toggle">
+              <input type="radio" bind:group={formData.self_hosted_vpn} value="1" />
+              <span>Yes</span>
+            </label>
           </div>
         </div>
       {/if}
@@ -164,7 +164,7 @@
           {:else}
             <select bind:value={formData[f.id]} class="input">
               {#each Object.entries(f.labels) as [v,label]}
-                <option value={v/f.scale.max}>{label}</option>
+                <option value={v / f.scale.max}>{label}</option>
               {/each}
             </select>
           {/if}
@@ -215,7 +215,7 @@
     <div in:fade={{ duration: 300 }}>
       <h2>Privacy Score</h2>
       <p class="score">{$animated.toFixed(0)}%</p>
-      <p class="rank">{rankTitle}</p>
+      <p class="level">{rankTitle}</p>
     </div>
 
     {#if showRecBtn}
