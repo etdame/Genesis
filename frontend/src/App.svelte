@@ -12,6 +12,7 @@
   let animated = tweened(0, { duration: 800 })
   let showRecBtn = false
   let rec = null, loadingRec = false, showRec = false
+  let resultRef
   $: fmap = new Map(factors.map(f => [f.id, f]))
 
   onMount(async () => {
@@ -59,7 +60,10 @@
       if (!r.ok) throw new Error(`HTTP ${r.status}`)
       const j = await r.json()
       score = j.score; level = j.level
-      showScore = true; animated.set(score); await tick()
+      showScore = true
+      animated.set(score)
+      await tick()
+      resultRef.scrollIntoView({ behavior: 'smooth', block: 'start' })
       showRecBtn = level < 7
     } catch (e) {
       error = e.message
@@ -105,8 +109,8 @@
               </select>
             {:else if f.type === 'scale'}
               <select id={f.id} bind:value={formData[f.id]} class="input">
-                {#each Array(f.scale.max - f.scale.min + 1).fill(0).map((_, i) => i + f.scale.min) as v}
-                  <option value={v / f.scale.max}>{f.labels[v]}</option>
+                {#each Object.entries(f.labels) as [v,label]}
+                  <option value={v / f.scale.max}>{label}</option>
                 {/each}
               </select>
             {:else}
@@ -118,6 +122,7 @@
           </div>
         {/if}
       {/each}
+
       <div class="button-row">
         <button class="btn" disabled={loading}>
           {loading ? 'Calculating…' : 'Calculate Your Privacy Score'}
@@ -133,15 +138,17 @@
   {/if}
 
   {#if showScore}
-    <div class="result-card" in:fade>
+    <div class="result-card" bind:this={resultRef} in:fade>
       <h2>🔒 Privacy Score</h2>
       <p class="score">{$animated.toFixed(0)}%</p>
       <p>Level: {level}</p>
+
       {#if showRecBtn}
         <button class="btn level-up" on:click={handleRecommend} disabled={loadingRec}>
           {loadingRec ? 'Loading…' : 'Want to level up?'}
         </button>
       {/if}
+
       {#if showRec}
         <div class="mt-4">
           <h3>💡 Next Tip</h3>
