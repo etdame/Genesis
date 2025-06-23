@@ -1,4 +1,4 @@
-# Genesis: Your Personal Privacy Journey
+# Ex0dus: Your Personal Privacy Journey
 
 > “In six days God created the heavens and the earth, and on the seventh day He rested.”  
 > Securing your data takes effort, but once you reach the summit, you may rest in private.
