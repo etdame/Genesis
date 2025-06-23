@@ -2,48 +2,105 @@
   "factors": [
     {
       "id": "network_protection",
-      "description": "VPN or Tor use vs. direct ISP connection",
+      "description": "How do you protect your network traffic?",
+      "type": "single-choice",
+      "options": [
+        { "id": "none", "label": "Direct ISP (no VPN)", "value": 0.00 },
+        { "id": "vpn", "label": "VPN only", "value": 0.12 },
+        { "id": "vpn_adv","label": "VPN with DNS leak protection","value": 0.18 }
+      ],
       "weight": 0.18
     },
     {
+      "id": "self_hosted_vpn",
+      "description": "Do you self-host your VPN/proxy service?",
+      "type": "boolean",
+      "weight": 0.08,
+      "conditional_on": {
+        "factor": "network_protection",
+        "options": ["vpn","vpn_adv"]
+      }
+    },
+    {
       "id": "email_practices",
-      "description": "Use of unique, privacy-focused email vs. single/shared account",
+      "description": "Rate your email privacy setup",
+      "type": "scale",
+      "scale": { "min": 0, "max": 3 },
+      "labels": {
+        "0": "Single/shared public email",
+        "1": "Separate work/personal, no encryption",
+        "2": "Privacy-focused provider",
+        "3": "Dedicated alias with PGP encryption"
+      },
       "weight": 0.13
     },
     {
       "id": "password_hygiene",
-      "description": "Password manager & unique passwords vs. reuse",
+      "description": "Rate your password practices",
+      "type": "scale",
+      "scale": { "min": 0, "max": 5 },
+      "labels": {
+        "0": "One password reused everywhere",
+        "3": "Password manager used but no rotation",
+        "5": "Manager + unique + rotated + strong"
+      },
       "weight": 0.13
     },
     {
       "id": "browser_metadata_hygiene",
-      "description": "Tracker-blocking/hardened browser + privacy DNS/search vs. default",
+      "description": "How hardened is your browser and metadata setup?",
+      "type": "single-choice",
+      "options": [
+        { "id": "default", "label": "Default browser settings", "value": 0.00 },
+        { "id": "adblock", "label": "Ad-blocker & tracker blocker", "value": 0.05 },
+        { "id": "hardened", "label": "Hardened browser (uBlock, privacy)", "value": 0.10 },
+        { "id": "full_hygiene","label": "Hardened + privacy DNS & search", "value": 0.13 }
+      ],
       "weight": 0.13
     },
     {
       "id": "open_source_usage",
-      "description": "Open-source privacy apps vs. proprietary",
+      "description": "How much open-source software do you use?",
+      "type": "single-choice",
+      "options": [
+        { "id": "none", "label": "All proprietary", "value": 0.00 },
+        { "id": "some", "label": "Mix of proprietary and open-source", "value": 0.06 },
+        { "id": "mostly","label": "Mostly open-source tools", "value": 0.09 },
+        { "id": "full", "label": "All privacy-focused open-source", "value": 0.12 }
+      ],
       "weight": 0.12
     },
     {
-      "id": "self_hosted_vpn",
-      "description": "Self-hosted VPN/proxy vs. commercial provider",
-      "weight": 0.08,
-      "conditional_on": "network_protection"
-    },
-    {
       "id": "os_telemetry",
-      "description": "Privacy-respecting OS (Linux) vs. telemetry-heavy OS",
+      "description": "Choose your operating system",
+      "type": "single-choice",
+      "options": [
+        { "id": "windows","label": "Windows 10/11 (default telemetry)", "value": 0.00 },
+        { "id": "macos", "label": "macOS (some telemetry)", "value": 0.04 },
+        { "id": "linux", "label": "Linux desktop", "value": 0.08 }
+      ],
       "weight": 0.08
     },
     {
       "id": "two_factor_authentication",
-      "description": "2FA on all critical accounts vs. none",
+      "description": "Two-factor authentication coverage",
+      "type": "single-choice",
+      "options": [
+        { "id": "none", "label": "No 2FA", "value": 0.00 },
+        { "id": "partial","label": "2FA on some accounts", "value": 0.04 },
+        { "id": "all", "label": "2FA on all critical accounts", "value": 0.08 }
+      ],
       "weight": 0.08
     },
     {
       "id": "encryption_at_rest",
-      "description": "Full-disk encryption enabled vs. none",
+      "description": "Disk encryption status",
+      "type": "single-choice",
+      "options": [
+        { "id": "none", "label": "No encryption", "value": 0.00 },
+        { "id": "partial", "label": "Encryption on some drives", "value": 0.025 },
+        { "id": "full", "label": "Full-disk encryption", "value": 0.05 }
+      ],
       "weight": 0.05
     }
   ]
