@@ -20,25 +20,25 @@
   ];
 
   const levels = [
-    { name: 'Genesis', desc: 'Critical improvements needed.' },
-    { name: 'Light', desc: 'Basics are covered but many gaps remain.' },
+    { name: '1. Genesis', desc: 'Critical improvements needed.' },
+    { name: '2. Light', desc: 'Basics are covered but many gaps remain.' },
     {
-      name: 'Sky & Water',
+      name: '3. Sky & Water',
       desc: 'Basic protections in place, further enhancements recommended.'
     },
     {
-      name: 'Land & Vegetation',
+      name: '4. Land & Vegetation',
       desc: 'Solid foundation, consider tightening system and browser settings.'
     },
     {
-      name: 'Stars & Lights',
+      name: '5. Stars & Lights',
       desc: 'Strong practices overall, with only minor improvements left.'
     },
     {
-      name: 'Animals & Humans',
+      name: '6. Animals & Humans',
       desc: 'Almost fully protected—just a few tweaks remain.'
     },
-    { name: 'Rest', desc: 'Best practices fully met, may you rest in private.' }
+    { name: '7. Rest', desc: 'Best practices fully met, may you rest in private.' }
   ];
 
   let index = 0;
