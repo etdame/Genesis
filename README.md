@@ -77,8 +77,8 @@ Genesis is a lightweight two-page web app that quantifies your online anonymity,
 
 1. **Clone & install**  
    ```bash
-   git clone https://github.com/your-org/genesis.git
-   cd genesis
+   git clone https://github.com/your-org/ex0dus.git
+   cd ex0dus
    # Backend
    cd backend && python -m venv venv && source venv/bin/activate
    pip install fastapi uvicorn
