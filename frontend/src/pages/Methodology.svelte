@@ -8,7 +8,7 @@
         'We selected nine core privacy factors (VPN use, email setup, password hygiene, etc.) and assigned each a weight based on its relative impact on your online anonymity.'
     },
     {
-      title: 'Weighted Sum & Normalization (0–100)',
+      title: 'Weighted Sum & Normalization',
       description:
         'Each factor’s value is multiplied by its weight, summed up, then normalized to a 0–100 scale to give you a single, easy-to-understand score.'
     },
